@@ -20,7 +20,6 @@ getMedia()
 const App = () => {
   const [localPeerName, setLocalPeerName] = useState('')
   const [remotePeerName, setRemotePeerName] = useState('')
-  console.log({ localPeerName, remotePeerName })
 
   return (
     <>
