@@ -83,8 +83,7 @@ export default function SignIn({ localPeerName, setLocalPeerName }) {
               if (isComposed) return
               if (e.target.value === '') return
               if (e.key === 'Enter') initializeLocalPeer(e)
-            }
-            }
+            }}
             value={name}
           />
           <Button
