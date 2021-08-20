@@ -49,9 +49,19 @@ export default function SignIn({ localPeerName, setLocalPeerName }) {
   const [isComposed, setIsComposed] = useState(false)
 
   useEffect(() => {
-    const bool = name === ''
+    // 両端のスペースを取り除く
+    const trimmedName = name.trim()
+    const bool = trimmedName === ''
     setDisabled(bool)
   }, [name])
+
+  const handleKeyDown = (e) => {
+    // 両端のスペースを取り除く
+    const trimmedValue = e.target.value.trim()
+    if (isComposed) return
+    if (trimmedValue === '') return
+    if (e.key === 'Enter') initializeLocalPeer(e)
+  }
 
   const initializeLocalPeer = useCallback((e) => {
     e.preventDefault()
@@ -79,11 +89,7 @@ export default function SignIn({ localPeerName, setLocalPeerName }) {
             onChange={(e) => setName(e.target.value)}
             onCompositionStart={() => setIsComposed(true)}
             onCompositionEnd={() => setIsComposed(false)}
-            onKeyDown={(e) => {
-              if (isComposed) return
-              if (e.target.value === '') return
-              if (e.key === 'Enter') initializeLocalPeer(e)
-            }}
+            onKeyDown={(e) => handleKeyDown(e)}
             value={name}
           />
           <Button
