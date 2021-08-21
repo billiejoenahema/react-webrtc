@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react'
+import Video from './Video'
 
-const VideoLocal = ({ localPeerName }) => {
+const VideoLocal = ({ name }) => {
   const videoRef = useRef(null)
   const currentVideoRef = videoRef.current
-
 
   useEffect(() => {
     const getMedia = async () => {
@@ -21,9 +21,7 @@ const VideoLocal = ({ localPeerName }) => {
   }, [currentVideoRef])
 
   return (
-    <div>
-
-    </div>
+    <Video isLocal={true} name={name} videoRef={videoRef} />
   )
 }
 
