@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles, AppBar, Toolbar, Typography } from '@material-ui/core'
 import InputFormLocal from './InputFormLocal'
 import InputFormRemote from './InputFormRemote'
 import VideoArea from './VideoArea'
+import RtcClient from '../utils/RtcClient'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,9 +15,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const App = () => {
+  const rtcClient = new RtcClient()
   const classes = useStyles()
-  const [localPeerName, setLocalPeerName] = useState('')
-  const [remotePeerName, setRemotePeerName] = useState('')
 
   return (
     <div className={classes.root}>
@@ -27,19 +27,9 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <InputFormLocal
-        localPeerName={localPeerName}
-        setLocalPeerName={setLocalPeerName}
-      />
-      <InputFormRemote
-        localPeerName={localPeerName}
-        remotePeerName={remotePeerName}
-        setRemotePeerName={setRemotePeerName}
-      />
-      <VideoArea
-        localPeerName={localPeerName}
-        remotePeerName={remotePeerName}
-      />
+      <InputFormLocal rtcClient={rtcClient} />
+      <InputFormRemote rtcClient={rtcClient} />
+      <VideoArea rtcClient={rtcClient} />
     </div>
   )
 }

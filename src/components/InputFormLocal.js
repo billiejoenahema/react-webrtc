@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function SignIn({ localPeerName, setLocalPeerName }) {
+export default function SignIn({ rtcClient }) {
   const label = 'あなたの名前'
   const classes = useStyles()
   const [name, setName] = useState('')
@@ -65,10 +65,11 @@ export default function SignIn({ localPeerName, setLocalPeerName }) {
 
   const initializeLocalPeer = useCallback((e) => {
     e.preventDefault()
-    setLocalPeerName(name)
-  }, [name, setLocalPeerName])
+    rtcClient.localPeerName = name
+    console.log({ rtcClient })
+  }, [name, rtcClient])
 
-  if (localPeerName) return <></>
+  if (rtcClient.localPeerName) return <></>
 
   return (
     <Container component="main" maxWidth="xs">
