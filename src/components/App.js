@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useReducer } from 'react'
 import { makeStyles, AppBar, Toolbar, Typography } from '@material-ui/core'
 import InputFormLocal from './InputFormLocal'
 import InputFormRemote from './InputFormRemote'
@@ -15,8 +15,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const App = () => {
-  const rtcClient = new RtcClient()
+  const [rtcClient, _setRtcClient] = useState(new RtcClient())
+  const [, forceRender] = useReducer((boolean) => !boolean, false)
   const classes = useStyles()
+
+  const setRtcClient = (rtcClient) => {
+    _setRtcClient(rtcClient)
+    forceRender()
+  }
 
   return (
     <div className={classes.root}>
@@ -27,8 +33,8 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <InputFormLocal rtcClient={rtcClient} />
-      <InputFormRemote rtcClient={rtcClient} />
+      <InputFormLocal rtcClient={rtcClient} setRtcClient={setRtcClient} />
+      <InputFormRemote rtcClient={rtcClient} setRtcClient={setRtcClient} />
       <VideoArea rtcClient={rtcClient} />
     </div>
   )
