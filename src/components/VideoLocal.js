@@ -1,16 +1,16 @@
 import React, { useRef, useEffect } from 'react'
 import Video from './Video'
 
-const VideoLocal = ({ name }) => {
+const VideoLocal = ({ rtcClient }) => {
   const videoRef = useRef(null)
   const currentVideoRef = videoRef.current
+  const mediaStream = rtcClient.mediaStream
 
   useEffect(() => {
-    const getMedia = async () => {
-      if (currentVideoRef === null) return
-      const constraints = { audio: true, video: true }
+    if (currentVideoRef === null) return
+
+    const getMedia = () => {
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         currentVideoRef.srcObject = mediaStream
       } catch (err) {
         console.error(err)
@@ -18,10 +18,10 @@ const VideoLocal = ({ name }) => {
     }
     getMedia()
 
-  }, [currentVideoRef])
+  }, [currentVideoRef, mediaStream])
 
   return (
-    <Video isLocal={true} name={name} videoRef={videoRef} />
+    <Video isLocal={true} name={rtcClient.localPeerName} videoRef={videoRef} />
   )
 }
 
