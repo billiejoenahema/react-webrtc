@@ -64,9 +64,8 @@ export default function SignIn({ rtcClient }) {
   }
 
   const initializeLocalPeer = useCallback((e) => {
+    rtcClient.startListening(name)
     e.preventDefault()
-    rtcClient.localPeerName = name
-    rtcClient.setRtcClient()
   }, [name, rtcClient])
 
   if (rtcClient.localPeerName) return <></>
