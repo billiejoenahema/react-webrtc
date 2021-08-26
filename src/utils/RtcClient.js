@@ -39,12 +39,10 @@ export default class RtcClient {
   }
 
   addAudioTrack() {
-
     this.RTCPeerConnection.addTrack(this.audioTrack, this.mediaStream)
   }
 
   addVideoTrack() {
-    const videoTrack = this.mediaStream.getVideoTracks()[0]
     this.RTCPeerConnection.addTrack(this.videoTrack, this.mediaStream)
   }
 
