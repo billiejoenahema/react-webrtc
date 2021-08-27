@@ -55,18 +55,19 @@ export default function SignIn({ rtcClient }) {
     setDisabled(bool)
   }, [name])
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     // 両端のスペースを取り除く
     const trimmedValue = e.target.value.trim()
     if (isComposed) return
     if (trimmedValue === '') return
-    if (e.key === 'Enter') initializeRemotePeer(e)
+    if (e.key === 'Enter') await initializeRemotePeer(e)
   }
 
-  const initializeRemotePeer = useCallback((e) => {
-    e.preventDefault()
-    rtcClient.connect(name)
-  }, [name, rtcClient])
+  const initializeRemotePeer = useCallback(
+    async (e) => {
+      e.preventDefault()
+      await rtcClient.connect(name)
+    }, [name, rtcClient])
 
   if (rtcClient.localPeerName === '') return <></>
   if (rtcClient.remotePeerName !== '') return <></>
@@ -100,7 +101,7 @@ export default function SignIn({ rtcClient }) {
             color="primary"
             className={classes.submit}
             disabled={disabled}
-            onClick={(e) => initializeRemotePeer(e)}
+            onClick={async (e) => await initializeRemotePeer(e)}
           >
             決定
           </Button>
