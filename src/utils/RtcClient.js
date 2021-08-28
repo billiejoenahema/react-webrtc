@@ -39,11 +39,11 @@ export default class RtcClient {
   }
 
   addAudioTrack() {
-    this.RTCPeerConnection.addTrack(this.audioTrack, this.mediaStream)
+    this.rtcPeerConnection.addTrack(this.audioTrack, this.mediaStream)
   }
 
   addVideoTrack() {
-    this.RTCPeerConnection.addTrack(this.videoTrack, this.mediaStream)
+    this.rtcPeerConnection.addTrack(this.videoTrack, this.mediaStream)
   }
 
   get audioTrack() {
@@ -97,12 +97,27 @@ export default class RtcClient {
     this.setRtcClient()
   }
 
+  async answer(sender, sessionDescription) {
+    try {
+      this.remotePeerName = sender
+      this.setOnicecandidateCallback()
+      this.setOntrack()
+      await this.setRemoteDescription(sessionDescription)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   async connect(remotePeerName) {
     this.remotePeerName = remotePeerName
     this.setOnicecandidateCallback()
     this.setOntrack()
     await this.offer()
     this.setRtcClient()
+  }
+
+  async setRemoteDescription(sessionDescription) {
+    await this.rtcPeerConnection.setRemoteDescription(sessionDescription)
   }
 
   get localDescription() {
@@ -122,9 +137,19 @@ export default class RtcClient {
     this.setRtcClient()
     this.firebaseSignallingClient.database
       .ref(localPeerName)
-      .on('value', (snapshot) => {
+      .on('value', async (snapshot) => {
         const data = snapshot.val()
+        if (data === null) return
 
+        const { sender, sessionDescription, type } = data
+
+        switch (type) {
+          case 'offer':
+            await this.answer(sender, sessionDescription)
+            break
+          default:
+            return
+        }
       })
   }
 }
