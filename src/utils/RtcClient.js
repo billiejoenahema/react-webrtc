@@ -103,6 +103,9 @@ export default class RtcClient {
       this.setOnicecandidateCallback()
       this.setOntrack()
       await this.setRemoteDescription(sessionDescription)
+      const answer = await this.rtcPeerConnection.createAnswer()
+      await this.rtcPeerConnection.setLocalDescription(answer)
+      await this.sendAnswer()
     } catch (err) {
       console.error(err)
     }
@@ -118,6 +121,15 @@ export default class RtcClient {
 
   async setRemoteDescription(sessionDescription) {
     await this.rtcPeerConnection.setRemoteDescription(sessionDescription)
+  }
+
+  async sendAnswer() {
+    this.firebaseSignallingClient.setPeerNames(
+      this.localPeerName,
+      this.remotePeerName
+    )
+
+    await this.firebaseSignallingClient.sendAnswer(this.localDescription)
   }
 
   get localDescription() {
