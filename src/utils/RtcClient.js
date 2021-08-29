@@ -144,10 +144,19 @@ export default class RtcClient {
     return this.rtcPeerConnection.localDescription.toJSON()
   }
 
+  async addIceCandidate(candidate) {
+    try {
+      const iceCandidate = new RTCIceCandidate(candidate)
+      await this.rtcPeerConnection.addIceCandidate(iceCandidate)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   setOnicecandidateCallback() {
-    this.rtcPeerConnection.onicecandidate = ({ candidate }) => {
+    this.rtcPeerConnection.onicecandidate = async ({ candidate }) => {
       if (candidate) {
-        // send candidate to remote
+        await this.firebaseSignallingClient.sendCandidate(candidate.toJSON())
       }
     }
   }
@@ -160,9 +169,10 @@ export default class RtcClient {
       .ref(localPeerName)
       .on('value', async (snapshot) => {
         const data = snapshot.val()
+        console.log({ data })
         if (data === null) return
 
-        const { sender, sessionDescription, type } = data
+        const { type, sender, sessionDescription, candidate } = data
 
         switch (type) {
           case 'offer':
@@ -171,7 +181,11 @@ export default class RtcClient {
           case 'answer':
             await this.saveReceivedSessionDescription(sessionDescription)
             break
+          case 'candidate':
+            await this.addIceCandidate(candidate)
+            break
           default:
+            this.setRtcClient()
             break
         }
       })
