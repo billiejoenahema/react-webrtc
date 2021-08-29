@@ -144,9 +144,10 @@ export default class RtcClient {
     }
   }
 
-  startListening(localPeerName) {
+  async startListening(localPeerName) {
     this.localPeerName = localPeerName
     this.setRtcClient()
+    await this.firebaseSignallingClient.remove(localPeerName)
     this.firebaseSignallingClient.database
       .ref(localPeerName)
       .on('value', async (snapshot) => {

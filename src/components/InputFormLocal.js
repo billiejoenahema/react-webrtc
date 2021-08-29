@@ -55,18 +55,19 @@ export default function SignIn({ rtcClient }) {
     setDisabled(bool)
   }, [name])
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     // 両端のスペースを取り除く
     const trimmedValue = e.target.value.trim()
     if (isComposed) return
     if (trimmedValue === '') return
-    if (e.key === 'Enter') initializeLocalPeer(e)
+    if (e.key === 'Enter') await initializeLocalPeer(e)
   }
 
-  const initializeLocalPeer = useCallback((e) => {
-    rtcClient.startListening(name)
-    e.preventDefault()
-  }, [name, rtcClient])
+  const initializeLocalPeer = useCallback(
+    async (e) => {
+      await rtcClient.startListening(name)
+      e.preventDefault()
+    }, [name, rtcClient])
 
   if (rtcClient.localPeerName) return <></>
 
@@ -89,7 +90,7 @@ export default function SignIn({ rtcClient }) {
             onChange={(e) => setName(e.target.value)}
             onCompositionStart={() => setIsComposed(true)}
             onCompositionEnd={() => setIsComposed(false)}
-            onKeyDown={(e) => handleKeyDown(e)}
+            onKeyDown={async (e) => await handleKeyDown(e)}
             value={name}
           />
           <Button
@@ -99,7 +100,7 @@ export default function SignIn({ rtcClient }) {
             color="primary"
             className={classes.submit}
             disabled={disabled}
-            onClick={(e) => initializeLocalPeer(e)}
+            onClick={async (e) => await initializeLocalPeer(e)}
           >
             決定
           </Button>
