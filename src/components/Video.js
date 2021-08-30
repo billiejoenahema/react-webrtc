@@ -1,14 +1,35 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Typography
+} from '@material-ui/core'
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+})
 
 const Video = ({ isLocal, name, videoRef }) => {
-  // isLocal: boolean
+  const classes = useStyles()
 
-  // implement video on/off later
   return (
-    <div>
-      <video ref={videoRef} autoPlay={true} muted={isLocal} />
-      <div>{name}</div>
-    </div>
+    <Card className={classes.root}>
+      <CardActionArea>
+        <video ref={videoRef} autoPlay={false} muted={isLocal} />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {name}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+      </CardActions>
+    </Card>
   )
 }
 

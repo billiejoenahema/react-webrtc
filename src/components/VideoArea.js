@@ -1,5 +1,6 @@
 import React from 'react'
-import { makeStyles, Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import VideoLocal from './VideoLocal'
 import VideoRemote from './VideoRemote'
 
@@ -20,7 +21,7 @@ const VideoArea = ({ rtcClient }) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container spacing={0}>
         <Grid item xs={6}>
           <VideoLocal rtcClient={rtcClient} />
         </Grid>
