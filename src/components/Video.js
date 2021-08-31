@@ -9,10 +9,10 @@ import {
 import useDimensions from './hooks/useDimensions'
 import VolumeButton from './VolumeButton'
 
-const Video = ({ isLocal, name, videoRef }) => {
+const Video = ({ isLocal, name, rtcClient, videoRef }) => {
   const refCard = useRef(null)
   const dimensionsCard = useDimensions(refCard)
-  const [muted, setMuted] = useState(true)
+  const [muted, setMuted] = useState(rtcClient.initialAudioMuted)
 
   return (
     <Card ref={refCard}>
@@ -30,7 +30,12 @@ const Video = ({ isLocal, name, videoRef }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <VolumeButton muted={muted} setMuted={setMuted} />
+        <VolumeButton
+          isLocal={isLocal}
+          muted={muted}
+          setMuted={setMuted}
+          rtcClient={rtcClient}
+        />
       </CardActions>
     </Card>
   )

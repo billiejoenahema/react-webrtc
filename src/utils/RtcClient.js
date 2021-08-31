@@ -1,5 +1,7 @@
 import FirebaseSignallingClient from './FirebaseSignallingClient'
 
+const INITIAL_AUDIO_ENABLED = false
+
 export default class RtcClient {
   constructor(setRtcClient, remoteVideoRef) {
     const config = {
@@ -12,6 +14,10 @@ export default class RtcClient {
     this.remoteVideoRef = remoteVideoRef
     this._setRtcClient = setRtcClient
     this.mediaStream = null
+  }
+
+  get initialAudioMuted() {
+    return !INITIAL_AUDIO_ENABLED
   }
 
   setRtcClient() {
@@ -39,6 +45,7 @@ export default class RtcClient {
   }
 
   addAudioTrack() {
+    this.audioTrack.enabled = INITIAL_AUDIO_ENABLED
     this.rtcPeerConnection.addTrack(this.audioTrack, this.mediaStream)
   }
 
@@ -52,6 +59,11 @@ export default class RtcClient {
 
   get videoTrack() {
     return this.mediaStream.getVideoTracks()[0]
+  }
+
+  toggleAudio() {
+    this.audioTrack.enabled = !this.audioTrack.enabled
+    this.setRtcClient()
   }
 
   async offer() {

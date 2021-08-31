@@ -24,6 +24,7 @@ const VideoLocal = ({ rtcClient }) => {
     <Video
       isLocal={true}
       name={rtcClient.localPeerName}
+      rtcClient={rtcClient}
       videoRef={videoRef}
     />
   )
