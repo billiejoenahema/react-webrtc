@@ -1,0 +1,33 @@
+import { useState, useEffect } from 'react'
+
+const defaultDimensions = { width: 0, height: 0 }
+
+const useDimensions = (targetRef) => {
+  let [dimensions, setDimensions] = useState(defaultDimensions)
+  const node = targetRef.current
+
+  const updateDimensions = (node) => {
+
+    if (node === null) return {
+      width: 0,
+      height: 0,
+    }
+    return defaultDimensions
+  }
+
+  dimensions = updateDimensions(node)
+
+  useEffect(() => {
+    const resizeDimensions = () => {
+      setDimensions(updateDimensions(node))
+
+    }
+    window.removeEventListener('resize', resizeDimensions)
+    window.addEventListener('resize', resizeDimensions)
+
+  }, [node])
+
+  return dimensions
+}
+
+export default useDimensions
