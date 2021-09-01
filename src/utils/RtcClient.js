@@ -74,7 +74,6 @@ export default class RtcClient {
 
   async createOffer() {
     try {
-
       return await this.rtcPeerConnection.createOffer()
     } catch (err) {
       console.error(err)

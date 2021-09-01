@@ -59,7 +59,7 @@ export default class FirebaseSignallingClient {
 
   async sendCandidate(candidate) {
     await this.targetRef.set({
-      type: candidate,
+      type: 'candidate',
       sender: this.localPeerName,
       candidate
     })
