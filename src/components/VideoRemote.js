@@ -1,24 +1,10 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import Video from './Video'
 
 const VideoRemote = ({ rtcClient }) => {
-  const videoRef = useRef(null)
-  const currentVideoRef = videoRef.current
-  const mediaStream = rtcClient.mediaStream
+  const videoRef = rtcClient.remoteVideoRef
 
-  useEffect(() => {
-    if (currentVideoRef === null) return
-
-    const getMedia = () => {
-      try {
-        currentVideoRef.srcObject = mediaStream
-      } catch (err) {
-        console.error(err)
-      }
-    }
-    getMedia()
-
-  }, [currentVideoRef, mediaStream])
+  if (rtcClient.remotePeerName === '') return <></>
 
   return (
     <Video
